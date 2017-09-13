@@ -1,0 +1,70 @@
+/*timeout
+public String longestPalindrome(String s) {
+        if(s.length()==1){
+            return s;
+        }
+        int maxLength=0;  
+        int toplength = s.length();
+        String longestString = null;  
+        for(int j=0;j<toplength;j++){
+            char temp_char = s.charAt(j);
+            for(int i=toplength-1;i>j;i--){
+                if(s.charAt(i)==temp_char){
+                    int temp = j;
+                    int length = i-temp+1;
+                    if(maxLength<length&&isPalindromic(temp,i,s,length)){
+                        maxLength = length;
+                        longestString = s.substring(temp,i+1);
+                    }                
+                }
+                 
+                
+            }
+        }
+        if(maxLength==0){
+            return s.substring(0,1);
+        }
+        return longestString;
+    }
+    public boolean isPalindromic (int start,int end,String s,int length){
+        if(length==0||length==1){
+           return true;   
+        }else{
+            if(s.charAt(start)==s.charAt(end)){
+                return isPalindromic(start+1,end-1,s,length-2);
+            }else{
+                return false;
+            }
+        }
+    }
+*/
+ public String longestPalindrome(String s) {
+    	int toplength = s.length();
+        if(toplength==1){
+        	return s;
+        }
+        int start = 0, end = 0;
+        
+        for(int j=0;j<toplength;j++){
+        	int oddLength = randomCenterPalindromic(j,j,s);
+        	int evenLength = randomCenterPalindromic(j,j+1,s);
+        	int length = Math.max(oddLength, evenLength);
+        	System.out.println("j="+j+",length="+length);
+        	if(length>end - start) {
+                start = j - (length - 1) / 2;
+                end = j + length / 2;
+            }
+        }
+        
+        return s.substring(start, end + 1);
+    }
+    public int randomCenterPalindromic (int start,int end,String s){
+    	int left = start,right = end;
+    	
+    	while(left>=0&&right<s.length()&& s.charAt(left) == s.charAt(right)){
+    		left--;
+    		right++;
+    	}
+    	System.out.println("right="+right+",left="+left);
+    	return right-left-1;
+    }
