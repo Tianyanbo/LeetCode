@@ -1,0 +1,159 @@
+/*
+public class Solution {
+	
+    /*public String longestPalindrome(String s) {
+    	int toplength = s.length();
+        if(toplength==1){
+        	return s;
+        }
+        int start = 0, end = 0;
+        
+        for(int j=0;j<toplength;j++){
+        	int oddLength = randomCenterPalindromic(j,j,s);
+        	int evenLength = randomCenterPalindromic(j,j+1,s);
+        	int length = Math.max(oddLength, evenLength);
+        	System.out.println("j="+j+",length="+length);
+        	if(length>end - start) {
+                start = j - (length - 1) / 2;
+                end = j + length / 2;
+            }
+        }
+        
+        return s.substring(start, end + 1);
+    }
+    public int randomCenterPalindromic (int start,int end,String s){
+    	int left = start,right = end;
+    	
+    	while(left>=0&&right<s.length()&& s.charAt(left) == s.charAt(right)){
+    		left--;
+    		right++;
+    	}
+    	System.out.println("right="+right+",left="+left);
+    	return right-left-1;
+    }*/
+	 public int[] smallestRange(List<List<Integer>> nums) {
+	       
+	        
+	        List<test> finals = new ArrayList<test>();
+	        Set<Integer>  set=new HashSet<Integer>();
+			for(int i = 0;i<nums.size();i++){
+				for(Integer temp:nums.get(i)){
+					finals.add(new test(temp,i));
+				}
+			}
+			Collections.sort(finals);
+			int minRange = finals.get(finals.size()-1).key-finals.get(0).key;
+			int minx = 0, miny = finals.size()-1;
+		    int length = nums.size();
+			System.out.println(finals);
+			for(int i=0;i<finals.size();i++){
+				if(i+length-1>finals.size()-1){
+					break;
+				}
+				int j=i-1;
+				while(set.size()!=length){
+					if(j+1>finals.size()-1){
+						break;
+					}
+					j = j+1;
+					set.add(finals.get(j).value);
+				}
+				if(set.size()==length){
+					if(finals.get(j).key-finals.get(i).key<=minRange){
+						minRange = finals.get(j).key-finals.get(i).key;
+						minx = i;
+						miny = j;
+					}
+				}else{
+					break;
+				}
+				set.clear();
+			}
+			
+	        return new int[] {finals.get(minx).key, finals.get(miny).key};
+	  }
+	 class test implements Comparable<test>{
+		 public Integer key;
+		 public Integer value;
+		 public test(Integer key,Integer value){
+			 this.key = key;
+			 this.value = value;
+		 }
+		@Override
+		public int compareTo(test o) {
+			return this.key.compareTo(o.key);
+		}
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return key+" "+value;
+		}
+		 
+	 }
+    
+    public static void main(String[] args){
+    			List<Integer> l1 = new ArrayList<Integer>();
+    			l1.add(1);
+    			l1.add(3);
+    			l1.add(10);
+    			//l1.add(24);
+    			//l1.add(26);
+    			
+    			List<Integer> l2 = new ArrayList<Integer>();
+    			l2.add(2);
+    			l2.add(10);
+    			//l2.add(12);
+    			//l2.add(20);
+    			
+    			List<Integer> l3 = new ArrayList<Integer>();
+    			l3.add(5);
+    			l3.add(18);
+    			l3.add(22);
+    			l3.add(30);
+    			List<List<Integer>> l = new ArrayList<List<Integer>>();
+    			l.add(l1);
+    			l.add(l2);
+    			//l.add(l3);
+    			
+    			
+    			int[] i = new Solution().smallestRange(l);
+    			System.out.println(i[0]+"   "+i[1]);
+    }
+}
+*/
+
+class Solution {
+   public int[] smallestRange(List<List<Integer>> nums) {
+	       PriorityQueue<int[]> minHeap = new PriorityQueue<int[]>(nums.size(), new Comparator<int[]>(){  
+	            public int compare(int[] o1, int[] o2) {  
+	                return o1[0] - o2[0];  
+	            }
+	        });  
+	          
+	        int max = nums.get(0).get(0);  
+	        for(int i=0; i<nums.size(); i++) {  
+	            minHeap.add(new int[]{nums.get(i).get(0), i, 0});  
+	            max = Math.max(max, nums.get(i).get(0));  
+	        }  
+	          
+	        int minRange = Integer.MAX_VALUE;
+	        int start = -1;  
+	        while(minHeap.size() == nums.size()) {  
+	            int[] t = minHeap.poll();  
+	            if(max - t[0] < minRange) {  
+	                minRange = max - t[0];  
+	                start = t[0];  
+	            }  
+	              
+	            if(t[2]+1 < nums.get(t[1]).size()) {  
+	                t[0] = nums.get(t[1]).get(t[2]+1);  
+	                t[2] ++;  
+	                minHeap.add(t);  
+	                max = Math.max(max, t[0]);  
+	            }  
+	        }  
+	          
+	        return new int[]{start, start+minRange};  
+		 
+	 }
+}
