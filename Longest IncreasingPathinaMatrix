@@ -1,0 +1,35 @@
+class Solution {
+        public static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    public int longestIncreasingPath(int[][] matrix) {
+        int longest = 1;
+        int height = matrix.length;
+        if(height==0){
+            return 0;
+        }
+        int width = matrix[0].length;
+        int[][] path = new int[matrix.length][matrix[0].length];
+        for(int i = 0;i<height;i++){
+        	for(int j=0;j<width;j++){
+        	    int temp = longestIncreasingPath(matrix,i,j,height,width,path);
+        		longest = Math.max(longest, temp);
+        	}
+        }
+        
+    	return longest;
+    }
+    
+    private int longestIncreasingPath(int[][] matrix,int i,int j,int height,int width,int[][] path){
+    	if(path[i][j]!=0){
+    		return path[i][j];
+    	}
+    	int longest = 1;
+    	for(int[] dir:dirs){
+    		int x = i + dir[0],y = j + dir[1];
+    		if(x < 0 || x >= height || y < 0 || y >= width || matrix[x][y] <= matrix[i][j]) continue;
+    		int len = 1 + longestIncreasingPath(matrix, x, y, height, width, path);
+    		longest = Math.max(longest, len);
+    	}
+    	path[i][j] = longest;
+    	return longest;
+    }
+}
