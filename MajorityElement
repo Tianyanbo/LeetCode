@@ -1,0 +1,21 @@
+publi class Solution {
+        public int majorityElement(int[] nums) {
+        Map<Integer,Integer> numM = new HashMap<Integer,Integer>();
+        int majority = 0;
+        int majority_count = 0;
+        for(int i :nums){
+            Integer result = 1;
+            if(numM.containsKey(i)){
+               result =  numM.get(i);
+               result = result+1;
+               
+            }
+            if(result>majority_count){
+            	   majority = i;
+            	   majority_count = result;
+             }
+            numM.put(i, result);
+        }
+        return majority;
+    }
+}
