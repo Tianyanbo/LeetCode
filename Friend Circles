@@ -1,0 +1,47 @@
+class Solution {
+    public int findCircleNum(int[][] M) {
+        int n = M.length;
+        if(n==0){
+            return 0;
+        }
+        int count = 0;
+        int[] m = new int[n];
+        for(int i = 0;i<n;i++){
+            if(m[i]!=1){
+                 dfs(M,m,i,n);
+                 count = count+1;
+            }
+        }
+        return count;
+    }
+    public void dfs(int[][] M, int[] m,int x,int n){
+        for(int y=0;y<n;y++){
+            if(M[x][y]==1&&m[y]!=1){
+                m[y]=1;
+                dfs(M,m,y,n);
+            }
+            
+        }
+    }
+    /*
+     public void dfs(int[][] M, int[] visited, int i) {
+        for (int j = 0; j < M.length; j++) {
+            if (M[i][j] == 1 && visited[j] == 0) {
+                visited[j] = 1;
+                dfs(M, visited, j);
+            }
+        }
+    }
+    public int findCircleNum(int[][] M) {
+        int[] visited = new int[M.length];
+        int count = 0;
+        for (int i = 0; i < M.length; i++) {
+            if (visited[i] == 0) {
+                dfs(M, visited, i);
+                count++;
+            }
+        }
+        return count;
+    }
+    */
+}
