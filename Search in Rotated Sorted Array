@@ -1,0 +1,75 @@
+/*
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+
+(i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+You may assume no duplicate exists in the array.
+
+
+*/
+
+class Solution {
+     public int search(int[] nums, int target) {
+	     if(nums.length==0) return -1;
+	     int point = findPoint(nums);
+	     int min = nums[point];
+	     int max = nums[point==0?nums.length-1:point-1];
+	     if(target<min||target>max){
+	    	return -1; 
+	     }
+	     if(target>nums[nums.length-1]){
+	    	 return search(nums,target,0,point-1);
+	     }else{
+	    	 return search(nums,target,point,nums.length-1);
+	     }
+	 }
+	 
+	 public int search(int[] nums, int target,int start,int end){
+		 if(start==end){
+			 if(nums[start]!=target){
+				 return -1;
+			 }else{
+				 return start;
+			 }
+		 }
+		 if(nums[start]==target){
+			 return start;
+		 }else if(nums[end]==target){
+			 return end;
+		 }else if(end-start==1){
+			 if(nums[start]==target){
+				 return start;
+			 }else if(nums[end]==target){
+				 return end;
+			 }else{
+				 return -1;
+			 }
+		 }
+		 if(target==nums[(start+end)/2]){
+			 return (start+end)/2;
+		 }else if(nums[end]>target&&target>nums[(start+end)/2]){
+			 return search(nums,target,(start+end)/2,end);
+		 }else if(nums[start]<target&&target<nums[(start+end)/2]){
+			 return search(nums,target,start,(start+end)/2);
+		 }else{
+			 return -1;
+		 }
+		 
+	 }
+	 public int findPoint(int[] nums){
+		 int i = 0;
+		 int j = 0;
+		 while(i<nums.length-1){
+			
+			 if(nums[i+1]<nums[i]){
+				 j = i+1;
+				 break;
+			 }
+			 i++;
+		 }
+		 return j;
+	 }
+	 
+}
